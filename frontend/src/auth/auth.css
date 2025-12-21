@@ -1,0 +1,29 @@
+.authContainer{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.fillForm{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn{
+  width: fit-content;
+  cursor: pointer;
+}
+
+input{
+  border-width: 0px 0px 1px 0px;
+}
+
+
+.moveTo{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
