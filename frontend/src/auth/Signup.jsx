@@ -1,5 +1,5 @@
 import "./auth.css";
-import {Link} from 'react-router';
+import { Link } from "react-router";
 
 export default function Signup() {
   const Submit = () => {};
@@ -9,22 +9,25 @@ export default function Signup() {
 
       <form onSubmit={Submit}>
         <div className="fillForm">
-          <div>
+          <div className="labelsAndFields">
+<div className="labels">
             <label>Name</label>
-            <input type="text" placeholder="Enter your name" />
-          </div>
-          <div>
             <label>Email</label>
-            <input type="email" placeholder="Enter your email" />
-          </div>
-          <div>
             <label>Password</label>
+          </div>
+
+          <div className="fields">
+            <input type="text" placeholder="Enter your name" />
+            <input type="email" placeholder="Enter your email" />
             <input type="password" placeholder="Enter your password" />
           </div>
-<div className="moveTo">
-  <p>already have an account? </p>
-  <Link to="/login">Login</Link>
-</div>
+          </div>
+          
+          <div className="moveTo">
+            <p>already have an account? </p>
+            <Link to="/login">Login</Link>
+          </div>
+
           <button type="submit" className="btn">
             Signup
           </button>

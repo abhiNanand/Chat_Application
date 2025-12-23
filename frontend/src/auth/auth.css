@@ -27,3 +27,23 @@ input{
   justify-content: space-between;
   align-items: center;
 }
+
+.fields{
+display: flex;
+flex-direction: column;
+}
+
+.labels{
+  display: flex;
+flex-direction: column;
+}
+
+.fillForm{
+  display: flex;
+  justify-content: center;
+}
+
+.labelsAndFields{
+  display: flex;
+  justify-content: space-around;
+}
