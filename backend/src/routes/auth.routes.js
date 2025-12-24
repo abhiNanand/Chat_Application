@@ -1,25 +1,12 @@
-import express from 'express';
-import cors from "cors";
-import mongoose from 'mongoose';
-
-import User from './models/user.model.js';
+import express from "express";
+import User from '../models/user.model.js';
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import nodemailer from "nodemailer";
 
+const router = express.Router();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-mongoose.connect("mongodb://127.0.0.1:27017/chat_application")
-.then(()=>console.log("db connected"))
-.catch((err)=>console.log("err"));
-
-app.get("/",(req,res)=>{
-  res.send("hello abhishek");
-});
-
-app.get("/verify-email",async(req,res)=>{
+router.get("/verify-email",async(req,res)=>{
   try{
     const {token} = req.query;
     const user = await User.findOne({verificationToken:token});
@@ -37,7 +24,7 @@ app.get("/verify-email",async(req,res)=>{
   }
 });
 
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -51,11 +38,10 @@ app.post("/login", async (req, res) => {
   if (!isMatch)
     return res.status(400).json({ message: "Invalid credentials" });
 
-  res.json({ message: "Login successful" });
+  res.json({ message: "Login successful",name: user.name });
 });
 
-
-app.post("/signup", async(req,res)=>{
+router.post("/signup", async(req,res)=>{
   
   try{
     const {name,email,password} = req.body;
@@ -74,6 +60,31 @@ app.post("/signup", async(req,res)=>{
       password: hashedPassword,
       verificationToken: token,
     });
+
+    //send verification link on user email thorugh nodemailer
+    //Step 1: Create Transporter
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+        auth:{
+          user: "abhinvishal5@gmail.com",
+          pass: process.env.GMAIL_APP_PASSWORD,
+      }
+    });
+
+    //send mail in signup route
+    const verifyLink = `http://localhost:3000/verify-email?token=${token}`;
+    await transporter.sendMail({
+      from: "Chat App by Abhishek Anand",
+      to: email,
+      subject: "Verify your email",
+      html:`<h3>Verify your email</h3>
+    <p>Click the link below:</p>
+    <a href="${verifyLink}">Verify Email</a>
+  `
+});
+    
+
     res.status(201).json({
       message: "Signup successful. Please verify your email",
     });
@@ -85,6 +96,4 @@ res.status(500).json({message:"Server error"});
 });
 
 
-
-
-app.listen(3000,()=>console.log("http://localhost:3000"));
+export default router;
